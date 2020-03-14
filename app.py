@@ -11,13 +11,14 @@ import shutil
 
 options = Options()
 options.headless = True
-chrome_driver_path = r"C:\Users\NH\PycharmProjects\SeleniumTest\drivers\chromedriver.exe"
+# chrome_driver_path = r"C:\Users\NH\PycharmProjects\SeleniumTest\drivers\chromedriver.exe"
 base_url = "https://www.8muses.com"
 
 def fetch_image_url(url,filename,download_location):
-    driver = webdriver.Chrome(chrome_driver_path, chrome_options=options)
-    driver.get(url)
-    page = driver.page_source
+    # driver = webdriver.Chrome(chrome_driver_path, chrome_options=options)
+    # driver.get(url)
+    # page = driver.page_source
+    page = requests.get(url).text
     soup = BeautifulSoup(page,"lxml")
     image_url = "http:"+soup.find("img",{"class":"image"})['src']
     download_image(image_url,filename,download_location)
@@ -36,10 +37,12 @@ if __name__=="__main__":
     album_url = input()
     print("Download Location : ")
     download_location = input()
-    driver = webdriver.Chrome(chrome_driver_path, chrome_options=options)
+    # driver = webdriver.Chrome(chrome_driver_path, chrome_options=options)
     print("Loading Comic...")
-    driver.get(album_url)
-    album_html = driver.page_source
+    # driver.get(album_url)
+    driver = requests.get(album_url)
+    # album_html = driver.page_source
+    album_html = driver.text
     print("Comic successfully loaded")
     soup = BeautifulSoup(album_html,"lxml")
     comic_name = soup.find("title").text.split("|")[0].strip()
